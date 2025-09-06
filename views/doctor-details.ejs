@@ -1,0 +1,117 @@
+
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center p-4">
+                    <img src="<%= doctor.profileImage %>" alt="Dr. <%= doctor.name %>" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    <h3 class="fw-bold">Dr. <%= doctor.name %></h3>
+                    <p class="text-primary fs-5 mb-1"><%= doctor.specialization %></p>
+                    <p class="text-muted mb-3"><%= doctor.department %></p>
+                    
+                    <div class="mb-3">
+                        <div class="bg-light p-3 rounded">
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <h4 class="fw-bold text-primary"><%= doctor.experience %></h4>
+                                    <small class="text-muted">Years Experience</small>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="fw-bold text-success">₹<%= doctor.consultationFee %></h4>
+                                    <small class="text-muted">Consultation Fee</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <% if (locals.user) { %>
+                        <a href="/appointments/book/<%= doctor._id %>" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-calendar-plus me-2"></i>
+                            Book Appointment
+                        </a>
+                    <% } else { %>
+                        <a href="/auth/login" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>
+                            Login to Book
+                        </a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Doctor Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>Qualification:</strong>
+                            <p class="text-muted mb-0"><%= doctor.qualification %></p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Department:</strong>
+                            <p class="text-muted mb-0"><%= doctor.department %></p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Specialization:</strong>
+                            <p class="text-muted mb-0"><%= doctor.specialization %></p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Experience:</strong>
+                            <p class="text-muted mb-0"><%= doctor.experience %> years</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Email:</strong>
+                            <p class="text-muted mb-0"><%= doctor.email %></p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Phone:</strong>
+                            <p class="text-muted mb-0"><%= doctor.phone %></p>
+                        </div>
+                    </div>
+                    
+                    <% if (doctor.bio) { %>
+                        <div class="mt-4">
+                            <strong>About Doctor:</strong>
+                            <p class="text-muted"><%= doctor.bio %></p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>
+                        Available Schedule
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <% if (doctor.availableSlots && doctor.availableSlots.length > 0) { %>
+                        <div class="row">
+                            <% doctor.availableSlots.forEach(slot => { %>
+                                <div class="col-md-6 mb-3">
+                                    <div class="border rounded p-3">
+                                        <h6 class="fw-bold text-primary"><%= slot.day %></h6>
+                                        <p class="text-muted mb-0">
+                                            <i class="fas fa-clock me-1"></i>
+                                            <%= slot.startTime %> - <%= slot.endTime %>
+                                        </p>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        </div>
+                    <% } else { %>
+                        <p class="text-muted">Schedule information not available. Please contact the clinic for availability.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

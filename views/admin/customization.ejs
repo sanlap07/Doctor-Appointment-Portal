@@ -1,0 +1,245 @@
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-2 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-cog me-2"></i>
+                        Admin Panel
+                    </h6>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="/admin/dashboard" class="list-group-item list-group-item-action">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Dashboard
+                    </a>
+                    <a href="/admin/doctors" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-md me-2"></i>
+                        Manage Doctors
+                    </a>
+                    <a href="/admin/patients" class="list-group-item list-group-item-action">
+                        <i class="fas fa-users me-2"></i>
+                        Manage Patients
+                    </a>
+                    <a href="/admin/appointments" class="list-group-item list-group-item-action">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Manage Appointments
+                    </a>
+                    <a href="/admin/customization" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-code me-2"></i>
+                        Developer Tools
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold">Developer Customization</h2>
+                <span class="badge bg-warning fs-6">Developer Mode</span>
+            </div>
+
+            <!-- System Information -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>
+                                System Information
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <p class="mb-2"><strong>Node.js Version:</strong></p>
+                                    <p class="mb-2"><strong>Express Version:</strong></p>
+                                    <p class="mb-2"><strong>MongoDB Status:</strong></p>
+                                    <p class="mb-0"><strong>Server Port:</strong></p>
+                                </div>
+                                <div class="col-6">
+                                    <p class="mb-2 text-muted">v18.x</p>
+                                    <p class="mb-2 text-muted">v4.18.x</p>
+                                    <p class="mb-2"><span class="badge bg-success">Connected</span></p>
+                                    <p class="mb-0 text-muted">3000</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-database me-2"></i>
+                                Database Collections
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-1"><i class="fas fa-user-md me-2 text-primary"></i>doctors</li>
+                                <li class="mb-1"><i class="fas fa-users me-2 text-success"></i>patients</li>
+                                <li class="mb-1"><i class="fas fa-calendar-alt me-2 text-info"></i>appointments</li>
+                                <li class="mb-0"><i class="fas fa-user-cog me-2 text-warning"></i>admins</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Documentation -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-plug me-2"></i>
+                        API Endpoints
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Endpoint</th>
+                                    <th>Description</th>
+                                    <th>Authentication</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge bg-success">GET</span></td>
+                                    <td><code>/api/doctors/search</code></td>
+                                    <td>Search doctors by name, specialization, or department</td>
+                                    <td>None</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-success">GET</span></td>
+                                    <td><code>/api/doctors/:id/available-slots/:date</code></td>
+                                    <td>Get available time slots for a doctor on specific date</td>
+                                    <td>None</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-info">POST</span></td>
+                                    <td><code>/auth/login</code></td>
+                                    <td>Patient login authentication</td>
+                                    <td>None</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-info">POST</span></td>
+                                    <td><code>/auth/register</code></td>
+                                    <td>Patient registration</td>
+                                    <td>None</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge bg-info">POST</span></td>
+                                    <td><code>/appointments/book/:doctorId</code></td>
+                                    <td>Book a new appointment</td>
+                                    <td>Patient</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration Options -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-wrench me-2"></i>
+                        System Configuration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Environment Variables</h6>
+                            <ul class="list-unstyled">
+                                <li><code>PORT</code> - Server port (default: 3000)</li>
+                                <li><code>MONGODB_URI</code> - Database connection string</li>
+                                <li><code>SESSION_SECRET</code> - Session encryption key</li>
+                                <li><code>NODE_ENV</code> - Environment mode</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Customization Options</h6>
+                            <ul class="list-unstyled">
+                                <li>• Modify appointment time slots</li>
+                                <li>• Add new doctor specializations</li>
+                                <li>• Customize email templates</li>
+                                <li>• Update UI themes and colors</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Development Tools -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-tools me-2"></i>
+                        Development Tools
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-primary w-100" onclick="createSampleData()">
+                                <i class="fas fa-database me-2"></i>
+                                Create Sample Data
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-warning w-100" onclick="clearDatabase()">
+                                <i class="fas fa-trash me-2"></i>
+                                Clear All Data
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-info w-100" onclick="exportData()">
+                                <i class="fas fa-download me-2"></i>
+                                Export Data
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="alert alert-info">
+                        <h6 class="fw-bold">Developer Notes:</h6>
+                        <ul class="mb-0">
+                            <li>This system uses Express.js with EJS templating</li>
+                            <li>MongoDB is used for data persistence</li>
+                            <li>Bootstrap 5 provides responsive UI components</li>
+                            <li>Session-based authentication for users and admins</li>
+                            <li>RESTful API endpoints for frontend integration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function createSampleData() {
+    if (confirm('This will create sample doctors, patients, and appointments. Continue?')) {
+        alert('Sample data creation feature would be implemented here.');
+    }
+}
+
+function clearDatabase() {
+    if (confirm('WARNING: This will delete ALL data from the database. This action cannot be undone. Continue?')) {
+        alert('Database clearing feature would be implemented here.');
+    }
+}
+
+function exportData() {
+    alert('Data export feature would be implemented here.');
+}
+</script>

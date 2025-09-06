@@ -1,0 +1,178 @@
+
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user me-2"></i>
+                        Patient Dashboard
+                    </h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="/appointments/dashboard" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        My Appointments
+                    </a>
+                    <a href="/search" class="list-group-item list-group-item-action">
+                        <i class="fas fa-search me-2"></i>
+                        Find Doctors
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-user-edit me-2"></i>
+                        Edit Profile
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="fas fa-file-medical me-2"></i>
+                        Medical History
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold">My Appointments</h2>
+                <a href="/search" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>
+                    Book New Appointment
+                </a>
+            </div>
+
+            <!-- Appointments Stats -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body text-center">
+                            <h3 class="fw-bold"><%= appointments.filter(apt => apt.status === 'Scheduled' || apt.status === 'Confirmed').length %></h3>
+                            <p class="mb-0">Upcoming</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                            <h3 class="fw-bold"><%= appointments.filter(apt => apt.status === 'Completed').length %></h3>
+                            <p class="mb-0">Completed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body text-center">
+                            <h3 class="fw-bold"><%= appointments.filter(apt => apt.status === 'Cancelled').length %></h3>
+                            <p class="mb-0">Cancelled</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body text-center">
+                            <h3 class="fw-bold"><%= appointments.length %></h3>
+                            <p class="mb-0">Total</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointments List -->
+            <% if (appointments.length === 0) { %>
+                <div class="card shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">No appointments found</h4>
+                        <p class="text-muted mb-4">You haven't booked any appointments yet.</p>
+                        <a href="/search" class="btn btn-primary">
+                            <i class="fas fa-search me-2"></i>
+                            Find Doctors
+                        </a>
+                    </div>
+                </div>
+            <% } else { %>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">All Appointments</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <% appointments.forEach(appointment => { %>
+                            <div class="border-bottom p-4">
+                                <div class="row align-items-center">
+                                    <div class="col-md-2 text-center mb-3 mb-md-0">
+                                        <img src="<%= appointment.doctor.profileImage %>" alt="Dr. <%= appointment.doctor.name %>" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                                    </div>
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <h6 class="fw-bold mb-1">Dr. <%= appointment.doctor.name %></h6>
+                                        <p class="text-primary mb-1"><%= appointment.doctor.specialization %></p>
+                                        <p class="text-muted small mb-1">
+                                            <i class="fas fa-calendar me-1"></i>
+                                            <%= new Date(appointment.appointmentDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+                                        </p>
+                                        <p class="text-muted small mb-0">
+                                            <i class="fas fa-clock me-1"></i>
+                                            <%= appointment.timeSlot.startTime %> - <%= appointment.timeSlot.endTime %>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-2 text-center mb-3 mb-md-0">
+                                        <% 
+                                            let badgeClass = 'bg-secondary';
+                                            if (appointment.status === 'Scheduled') badgeClass = 'bg-primary';
+                                            else if (appointment.status === 'Confirmed') badgeClass = 'bg-success';
+                                            else if (appointment.status === 'Completed') badgeClass = 'bg-info';
+                                            else if (appointment.status === 'Cancelled') badgeClass = 'bg-danger';
+                                        %>
+                                        <span class="badge <%= badgeClass %> fs-6"><%= appointment.status %></span>
+                                        <p class="text-muted small mb-0 mt-1">₹<%= appointment.consultationFee %></p>
+                                    </div>
+                                    <div class="col-md-2 text-end">
+                                        <div class="btn-group-vertical d-grid gap-1">
+                                            <a href="/appointments/<%= appointment._id %>" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                            <% if (appointment.status === 'Scheduled' || appointment.status === 'Confirmed') { %>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="cancelAppointment('<%= appointment._id %>')">
+                                                    <i class="fas fa-times"></i> Cancel
+                                                </button>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Appointment Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to cancel this appointment? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Appointment</button>
+                <form id="cancelForm" method="POST" style="display: inline;">
+                    <input type="hidden" name="_method" value="POST">
+                    <button type="submit" class="btn btn-danger">Cancel Appointment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function cancelAppointment(appointmentId) {
+    document.getElementById('cancelForm').action = `/appointments/${appointmentId}/cancel`;
+    new bootstrap.Modal(document.getElementById('cancelModal')).show();
+}
+</script>

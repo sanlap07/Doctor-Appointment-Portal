@@ -1,0 +1,139 @@
+
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white py-4">
+                    <h3 class="mb-0 text-center">
+                        <i class="fas fa-calendar-plus me-2"></i>
+                        Book Appointment
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Doctor Info -->
+                    <div class="bg-light rounded p-3 mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center">
+                                <img src="<%= doctor.profileImage %>" alt="Dr. <%= doctor.name %>" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover;">
+                            </div>
+                            <div class="col-md-10">
+                                <h5 class="fw-bold mb-1">Dr. <%= doctor.name %></h5>
+                                <p class="text-primary mb-1"><%= doctor.specialization %></p>
+                                <p class="text-muted small mb-0"><%= doctor.department %> | ₹<%= doctor.consultationFee %> consultation fee</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form action="/appointments/book/<%= doctor._id %>" method="POST" id="bookingForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="appointmentDate" class="form-label">Appointment Date</label>
+                                <input type="date" class="form-control" id="appointmentDate" name="appointmentDate" required min="<%= new Date().toISOString().split('T')[0] %>">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="timeSlot" class="form-label">Available Time Slots</label>
+                                <select class="form-select" id="timeSlot" name="timeSlot" required disabled>
+                                    <option value="">Select date first</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="consultationType" class="form-label">Consultation Type</label>
+                            <select class="form-select" id="consultationType" name="consultationType" required>
+                                <option value="In-Person">In-Person Visit</option>
+                                <option value="Telemedicine">Telemedicine (Online)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">Reason for Visit</label>
+                            <select class="form-select" id="reason" name="reason" required>
+                                <option value="">Select reason</option>
+                                <option value="Regular Checkup">Regular Checkup</option>
+                                <option value="Follow-up Visit">Follow-up Visit</option>
+                                <option value="New Symptoms">New Symptoms</option>
+                                <option value="Chronic Condition Management">Chronic Condition Management</option>
+                                <option value="Preventive Care">Preventive Care</option>
+                                <option value="Emergency Consultation">Emergency Consultation</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="symptoms" class="form-label">Symptoms / Additional Details (Optional)</label>
+                            <textarea class="form-control" id="symptoms" name="symptoms" rows="4" placeholder="Please describe your symptoms or provide additional details about your visit..."></textarea>
+                        </div>
+
+                        <div class="bg-light rounded p-3 mb-4">
+                            <h6 class="fw-bold mb-2">Appointment Summary</h6>
+                            <div class="row">
+                                <div class="col-6">
+                                    <small class="text-muted">Doctor:</small>
+                                    <p class="mb-1">Dr. <%= doctor.name %></p>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Consultation Fee:</small>
+                                    <p class="mb-1 text-success fw-bold">₹<%= doctor.consultationFee %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-calendar-check me-2"></i>
+                                Book Appointment
+                            </button>
+                            <a href="/doctor/<%= doctor._id %>" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Back to Doctor Profile
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('appointmentDate').addEventListener('change', function() {
+    const date = this.value;
+    const doctorId = '<%= doctor._id %>';
+    const timeSlotSelect = document.getElementById('timeSlot');
+    
+    if (date) {
+        timeSlotSelect.disabled = true;
+        timeSlotSelect.innerHTML = '<option value="">Loading...</option>';
+        
+        fetch(`/api/doctors/${doctorId}/available-slots/${date}`)
+            .then(response => response.json())
+            .then(data => {
+                timeSlotSelect.innerHTML = '';
+                
+                if (data.availableSlots.length === 0) {
+                    timeSlotSelect.innerHTML = '<option value="">No slots available</option>';
+                    timeSlotSelect = true;
+                } else {
+                    timeSlotSelect.innerHTML = '<option value="">Select time slot</option>';
+                    data.availableSlots.forEach(slot => {
+                        const option = document.createElement('option');
+                        option.value = slot;
+                        option.textContent = slot;
+                        timeSlotSelect.appendChild(option);
+                    });
+                    timeSlotSelect.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                timeSlotSelect.innerHTML = '<option value="">Error loading slots</option>';
+                timeSlotSelect.disabled = true;
+            });
+    } else {
+        timeSlotSelect.innerHTML = '<option value="">Select date first</option>';
+        timeSlotSelect.disabled = true;
+    }
+});
+</script>

@@ -1,0 +1,23 @@
+
+
+<div class="container py-5">
+    <div class="text-center">
+        <div class="mb-4">
+            <i class="fas fa-exclamation-circle fa-5x text-danger"></i>
+        </div>
+        <h1 class="display-4 fw-bold text-danger">Server Error</h1>
+        <p class="lead text-muted mb-4">
+            Something went wrong on our end. Please try again later.
+        </p>
+        <% if (locals.error && process.env.NODE_ENV === 'development') { %>
+            <div class="alert alert-danger text-start">
+                <h6>Error Details (Development Mode):</h6>
+                <pre><%= error.stack %></pre>
+            </div>
+        <% } %>
+        <a href="/" class="btn btn-primary">
+            <i class="fas fa-home me-2"></i>
+            Go Home
+        </a>
+    </div>
+</div>

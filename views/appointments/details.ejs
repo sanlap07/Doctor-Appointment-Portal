@@ -1,0 +1,206 @@
+
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Appointment Details
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Status Badge -->
+                    <div class="text-center mb-4">
+                        <% 
+                            let badgeClass = 'bg-secondary';
+                            if (appointment.status === 'Scheduled') badgeClass = 'bg-primary';
+                            else if (appointment.status === 'Confirmed') badgeClass = 'bg-success';
+                            else if (appointment.status === 'Completed') badgeClass = 'bg-info';
+                            else if (appointment.status === 'Cancelled') badgeClass = 'bg-danger';
+                        %>
+                        <span class="badge <%= badgeClass %> fs-4 px-4 py-2"><%= appointment.status %></span>
+                    </div>
+
+                    <!-- Doctor Information -->
+                    <div class="card bg-light mb-4">
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-3">Doctor Information</h5>
+                            <div class="row align-items-center">
+                                <div class="col-md-3 text-center">
+                                    <img src="<%= appointment.doctor.profileImage %>" alt="Dr. <%= appointment.doctor.name %>" class="rounded-circle mb-2" style="width: 100px; height: 100px; object-fit: cover;">
+                                </div>
+                                <div class="col-md-9">
+                                    <h4 class="fw-bold">Dr. <%= appointment.doctor.name %></h4>
+                                    <p class="text-primary mb-1"><%= appointment.doctor.specialization %></p>
+                                    <p class="text-muted mb-1"><%= appointment.doctor.department %></p>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fas fa-envelope me-1"></i> <%= appointment.doctor.email %>
+                                        <span class="ms-3"><i class="fas fa-phone me-1"></i> <%= appointment.doctor.phone %></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Details -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-primary mb-3">
+                                        <i class="fas fa-calendar me-2"></i>
+                                        Date & Time
+                                    </h6>
+                                    <p class="mb-2">
+                                        <strong>Date:</strong> 
+                                        <%= new Date(appointment.appointmentDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %>
+                                    </p>
+                                    <p class="mb-2">
+                                        <strong>Time:</strong> 
+                                        <%= appointment.timeSlot.startTime %> - <%= appointment.timeSlot.endTime %>
+                                    </p>
+                                    <p class="mb-0">
+                                        <strong>Type:</strong> 
+                                        <span class="badge bg-info"><%= appointment.consultationType %></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h6 class="fw-bold text-primary mb-3">
+                                        <i class="fas fa-dollar-sign me-2"></i>
+                                        Payment Information
+                                    </h6>
+                                    <p class="mb-2">
+                                        <strong>Consultation Fee:</strong> 
+                                        <span class="text-success fw-bold">₹<%= appointment.consultationFee %></span>
+                                    </p>
+                                    <p class="mb-0">
+                                        <strong>Payment Status:</strong>
+                                        <% 
+                                            let paymentBadge = 'bg-warning';
+                                            if (appointment.paymentStatus === 'Paid') paymentBadge = 'bg-success';
+                                            else if (appointment.paymentStatus === 'Refunded') paymentBadge = 'bg-info';
+                                        %>
+                                        <span class="badge <%= paymentBadge %>"><%= appointment.paymentStatus %></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reason & Symptoms -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6 class="fw-bold text-primary mb-3">
+                                <i class="fas fa-stethoscope me-2"></i>
+                                Visit Details
+                            </h6>
+                            <p class="mb-2">
+                                <strong>Reason for Visit:</strong> <%= appointment.reason %>
+                            </p>
+                            <% if (appointment.symptoms) { %>
+                                <p class="mb-0">
+                                    <strong>Symptoms/Notes:</strong> <%= appointment.symptoms %>
+                                </p>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Prescription (if completed) -->
+                    <% if (appointment.status === 'Completed' && appointment.prescription && appointment.prescription.medications.length > 0) { %>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h6 class="fw-bold text-primary mb-3">
+                                    <i class="fas fa-prescription-bottle-alt me-2"></i>
+                                    Prescription
+                                </h6>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Medication</th>
+                                                <th>Dosage</th>
+                                                <th>Frequency</th>
+                                                <th>Duration</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% appointment.prescription.medications.forEach(med => { %>
+                                                <tr>
+                                                    <td><%= med.name %></td>
+                                                    <td><%= med.dosage %></td>
+                                                    <td><%= med.frequency %></td>
+                                                    <td><%= med.duration %></td>
+                                                </tr>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <% if (appointment.prescription.instructions) { %>
+                                    <p class="mb-0 mt-3">
+                                        <strong>Instructions:</strong> <%= appointment.prescription.instructions %>
+                                    </p>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-2 justify-content-center">
+                        <a href="/appointments/dashboard" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Dashboard
+                        </a>
+                        
+                        <% if (appointment.status === 'Scheduled' || appointment.status === 'Confirmed') { %>
+                            <button type="button" class="btn btn-outline-danger" onclick="cancelAppointment('<%= appointment._id %>')">
+                                <i class="fas fa-times me-2"></i>
+                                Cancel Appointment
+                            </button>
+                        <% } %>
+                        
+                        <% if (appointment.followUpDate) { %>
+                            <span class="btn btn-outline-info">
+                                <i class="fas fa-calendar-plus me-2"></i>
+                                Follow-up: <%= new Date(appointment.followUpDate).toLocaleDateString() %>
+                            </span>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Appointment Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cancel Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to cancel this appointment? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Appointment</button>
+                <form id="cancelForm" method="POST" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Cancel Appointment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function cancelAppointment(appointmentId) {
+    document.getElementById('cancelForm').action = `/appointments/${appointmentId}/cancel`;
+    new bootstrap.Modal(document.getElementById('cancelModal')).show();
+}
+</script>
