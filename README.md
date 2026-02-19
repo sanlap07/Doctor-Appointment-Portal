@@ -215,7 +215,7 @@ This project is licensed under the MIT License.
 ## Support
 
 For support and questions:
-- Email: support@healthcareplus.com
+- Email: sanlapsutrodha6@gmail.com
 - Create an issue in the repository
 - Check the documentation
 
